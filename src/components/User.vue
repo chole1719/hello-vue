@@ -99,6 +99,7 @@ export default {
           age: "22"
         }
       ],
+      //增加对话框的显示与隐藏
       addDialogVisible: false,
       addData: {
         id: "",
@@ -147,11 +148,21 @@ export default {
     showEditDiag(row) {
       this.editDialogVisible = true;
       this.editData = row;
+      this.editData.id=row.id
     },
     /* 修改用户信息 */
     editUser(id) {
       // 使用map()实现
-      this.tableData.push(this.editData);
+      const editForm=_.cloneDeep(this.editData)
+      this.tableData.map(function(user){
+        if(user.id!=editForm.id){
+          return user
+        }
+        else{
+          return editForm
+        }
+      })
+      this.editDialogVisible=false
     },
     /* 删除对话框 */
     async delDiag(id) {
