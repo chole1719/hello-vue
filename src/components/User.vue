@@ -5,8 +5,8 @@
       <!-- 布局 -->
       <el-row>
         <el-col :span="6">
-          <el-input placeholder="请输入内容" v-model="search">
-            <el-button slot="append" type="primary" icon="el-icon-search" size="mini"></el-button>
+          <el-input placeholder="请输入姓名或地址" v-model="search" >
+            <el-button slot="append" type="primary" icon="el-icon-search" size="mini" @click="searchUser"></el-button>
           </el-input>
         </el-col>
         <el-col :span="6">
@@ -15,10 +15,11 @@
       </el-row>
       <!-- 表格区域 -->
       <el-table :data="tableData" style="width: 100%" striped border>
-        <el-table-column prop="id" label="编号" width="180"></el-table-column>
-        <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-        <el-table-column prop="sex" label="性别" width="180"></el-table-column>
-        <el-table-column prop="age" label="年龄"></el-table-column>
+        <el-table-column prop="id" label="编号" width="80"></el-table-column>
+        <el-table-column prop="name" label="姓名" width="80"></el-table-column>
+        <el-table-column prop="sex" label="性别" width="80"></el-table-column>
+        <el-table-column prop="age" label="年龄" width="80"></el-table-column>
+        <el-table-column prop="adress" label="地址"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="showEditDiag(scope.row)">修改</el-button>
@@ -42,6 +43,9 @@
         <el-form-item label="年龄">
           <el-input v-model="addData.age"></el-input>
         </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="addData.adress"></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
@@ -64,6 +68,9 @@
         <el-form-item label="年龄">
           <el-input v-model="editData.age"></el-input>
         </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="editData.adress"></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
@@ -84,19 +91,22 @@ export default {
           id: "123",
           name: "张三",
           sex: "男",
-          age: "27"
+          age: "27",
+          adress:'江苏省无锡市梁溪区五爱广场'
         },
         {
           id: "233",
           name: "王武",
           sex: "男",
-          age: "27"
+          age: "27",
+          adress:'江苏省无锡市梁溪区国金大厦'
         },
         {
           id: "344",
           name: "李四",
           sex: "女",
-          age: "22"
+          age: "22",
+          adress:'江苏省无锡市梁溪区崇安寺'
         }
       ],
       //增加对话框的显示与隐藏
@@ -105,7 +115,8 @@ export default {
         id: "",
         name: "",
         sex: "",
-        age: ""
+        age: "",
+        adress:''
       },
       addDataRules: {
         name: [
@@ -122,7 +133,8 @@ export default {
         id: "",
         name: "",
         age: "",
-        sex: ""
+        sex: "",
+        adress:''
       },
       search: ""
     };
@@ -137,7 +149,7 @@ export default {
       this.addData.id = Math.floor(10000 * Math.random());
       // 深拷贝一个addData
       const addForm=_.cloneDeep(this.addData)
-      this.tableData=this.tableData.push(addForm)
+      this.tableData.push(addForm)
       this.addDialogVisible = false;
     },
     /* 重置添加对话框 */
@@ -182,8 +194,14 @@ export default {
       }
       // this.tableData.splice(id-1,1)
       // 使用filter实现 id不等留下来 相等的删除掉
-      this.tableData=this.tableData.map(function(item){
+      this.tableData=this.tableData.filter(function(item){
          return item.id!=id
+      })
+    },
+    searchUser(){
+      var search=this.search
+      this.tableData=this.tableData.filter(function(router){
+       return router.name.indexOf(search)!=-1 || router.adress.indexOf(search)!=-1
       })
     }
   },
