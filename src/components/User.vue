@@ -138,7 +138,7 @@ export default {
       },
       search: ""
     };
-  },
+  }, 
   methods: {
     /* 展示添加用户的对对话框 */
     showAddDialog() {
